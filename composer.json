@@ -1,6 +1,7 @@
 {
     "name": "dtisgodsson/elocrypt",
     "description": "Automatically encrypt and decrypt Eloquent attributes with ease.",
+    "keywords": ["eloquent", "l4", "laravel", "laravel4", "encryption", "eloquent encryption", "laravel4 encryption", "laravel4 aes", "eloquent aes"],
     "authors": [
         {
             "name": "Darren Taylor",
