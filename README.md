@@ -23,8 +23,7 @@ For example:
 
 	class User extends Eloquent {
 
-    use ElocryptTrait;
+    		use ElocryptTrait;
     
-    public $encryptable = ['first_name', 'last_name', 'address_line_1', 'postcode'];
-    
-  }
+    		public $encryptable = ['first_name', 'last_name', 'address_line_1', 'postcode'];
+  	}
