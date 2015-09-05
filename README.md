@@ -27,3 +27,10 @@ For example:
     
     		public $encryptable = ['first_name', 'last_name', 'address_line_1', 'postcode'];
   	}
+
+# How it Works?
+
+By including the ElocryptTrait, the __set() and __get() methods provided by Eloquent are overridden
+to include an additional step. This additional step simply checks whether the attribute being
+set or get is included in the "encryptable" array on the model, and either encrypts/decrypts it accordingly
+OR calls the parent __set() or __get() method.
