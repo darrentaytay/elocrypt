@@ -1,6 +1,6 @@
 <?php namespace Dtisgodsson\Elocrypt;
 
-use Illuminate\Contracts\Encryption\DecryptException;
+use Illuminate\Encryption\DecryptException;
 use Crypt;
 
 trait ElocryptTrait {
