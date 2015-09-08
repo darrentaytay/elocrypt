@@ -70,7 +70,7 @@ trait ElocryptTrait {
     {
         if(!isset($this->encryptable))
         {
-            return parent::update($id, $attributes);
+            return parent::update($attributes);
         }
 
         foreach ($attributes as $key => $value) {
