@@ -79,11 +79,12 @@ trait ElocryptTrait {
             {
                 try
                 {
-                    $attributes[$key] = Crypt::encrypt($value);
+                    $decrypted = Crypt::decrypt($value);
+                    $attributes[$key] = $value;
                 }
                 catch(DecryptException $exception)
                 {
-                    $attributes[$key] = $value;
+                    $attributes[$key] = Crypt::encrypt($value);
                 }
             }
         }
