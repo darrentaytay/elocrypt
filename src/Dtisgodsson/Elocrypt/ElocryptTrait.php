@@ -136,4 +136,35 @@ trait ElocryptTrait {
 
         return parent::newInstance($attributes, $exists);
     }
+
+    /**
+     * Convert the model's attributes to an array.
+     *
+     * @return array
+     */
+    public function attributesToArray()
+    {
+        $attributes = parent::attributesToArray();
+
+        if(!isset($this->encryptable))
+        {
+            return $attributes;
+        }
+
+        foreach ($this->encryptable as $key)
+        {
+            if ( ! isset($attributes[$key])) continue;
+
+            try
+            {
+                $attributes[$key] = Crypt::decrypt($attributes[$key]);
+            }
+            catch(DecryptException $exception)
+            {
+                //Do nothing, attribute already exists
+            }
+        }
+
+        return $attributes;
+    }
 }
