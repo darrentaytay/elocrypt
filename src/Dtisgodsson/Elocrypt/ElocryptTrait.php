@@ -38,4 +38,29 @@ trait ElocryptTrait {
 
         return $value;
     }
+
+    public function update(Array $attributes = [])
+    {
+        if(!isset($this->encryptable))
+        {
+            return parent::update($id, $attributes);
+        }
+
+        foreach ($attributes as $key => $value) {
+
+            if(in_array($key, $this->encryptable))
+            {
+                try
+                {
+                    $attributes[$key] = Crypt::encrypt($value);
+                }
+                catch(DecryptException $exception)
+                {
+                    $attributes[$key] = $value;
+                }
+            }
+        }
+
+        return parent::update($attributes);
+    }
 }
