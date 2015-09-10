@@ -39,7 +39,13 @@ trait ElocryptTrait {
         return $value;
     }
 
-    public static function create(Array $attributes = [])
+    /**
+     * Save a new model and return the instance.
+     *
+     * @param  array  $attributes
+     * @return static
+     */
+    public static function create(array $attributes)
     {
         $model = new static;
 
@@ -66,11 +72,17 @@ trait ElocryptTrait {
         return parent::create($attributes);
     }
 
-    public function update(Array $attributes = [])
+    /**
+     * Update the model in the database.
+     *
+     * @param  array  $attributes
+     * @return bool|int
+     */
+    public function update(array $attributes = array())
     {
         if(!isset($this->encryptable))
         {
-            return parent::update($id, $attributes);
+            return parent::update($attributes);
         }
 
         foreach ($attributes as $key => $value) {
@@ -90,5 +102,69 @@ trait ElocryptTrait {
         }
 
         return parent::update($attributes);
+    }
+
+    /**
+     * Create a new instance of the given model.
+     *
+     * @param  array  $attributes
+     * @param  bool   $exists
+     * @return static
+     */
+    public function newInstance($attributes = array(), $exists = false)
+    {
+        if(!isset($this->encryptable))
+        {
+            return parent::newInstance($attributes, $exists);
+        }
+
+        foreach ($attributes as $key => $value) {
+
+            if(in_array($key, $this->encryptable))
+            {
+                try
+                {
+                    $decrypted = Crypt::decrypt($value);
+                    $attributes[$key] = $value;
+                }
+                catch(DecryptException $exception)
+                {
+                    $attributes[$key] = Crypt::encrypt($value);
+                }
+            }
+        }
+
+        return parent::newInstance($attributes, $exists);
+    }
+
+    /**
+     * Convert the model's attributes to an array.
+     *
+     * @return array
+     */
+    public function attributesToArray()
+    {
+        $attributes = parent::attributesToArray();
+
+        if(!isset($this->encryptable))
+        {
+            return $attributes;
+        }
+
+        foreach ($this->encryptable as $key)
+        {
+            if ( ! isset($attributes[$key])) continue;
+
+            try
+            {
+                $attributes[$key] = Crypt::decrypt($attributes[$key]);
+            }
+            catch(DecryptException $exception)
+            {
+                //Do nothing, attribute already exists
+            }
+        }
+
+        return $attributes;
     }
 }
