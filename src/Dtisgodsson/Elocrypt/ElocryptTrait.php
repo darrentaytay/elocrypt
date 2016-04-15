@@ -167,4 +167,37 @@ trait ElocryptTrait {
 
         return $attributes;
     }
+
+    /**
+     * Get the model's original attribute values.
+     *
+     * @param  string  $key
+     * @param  mixed   $default
+     * @return array
+     */
+    public function getOriginal($key = null, $default = null)
+    {
+        $original = parent::getOriginal($key, $default);
+
+        if(!isset($this->encryptable))
+        {
+            return $original;
+        }
+
+        foreach ($this->encryptable as $key)
+        {
+            if ( ! isset($original[$key])) continue;
+
+            try
+            {
+                $original[$key] = Crypt::decrypt($original[$key]);
+            }
+            catch(DecryptException $exception)
+            {
+                //Do nothing, attribute already exists
+            }
+        }
+
+        return $original;
+    }
 }
